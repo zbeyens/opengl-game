@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glitter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="configuration\root_directory.h" />
+    <None Include="resources\objects\nanosuit\nanosuit.blend" />
+    <None Include="resources\objects\nanosuit\nanosuit.mtl" />
+    <None Include="resources\objects\IronMan\v1_0_IronManRigged.max" />
+    <None Include="resources\objects\IronMan\IronMan.mtl" />
+    <None Include="resources\objects\wolf\Wolf_obj.mtl" />
+    <None Include="resources\objects\street\Street environment_V01.mtl" />
+    <None Include="resources\objects\Habitat\Habitat.mtl" />
+    <None Include="shaders\lamp.frag" />
+    <None Include="shaders\lamp.vert" />
+    <None Include="shaders\lighting.frag" />
+    <None Include="shaders\lighting.vert" />
+    <None Include="shaders\model.frag" />
+    <None Include="shaders\model.vert" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
+    <None Include="shaders\start.frag" />
+    <None Include="shaders\start.vert" />
+    <None Include="shaders\blending.vert" />
+    <None Include="shaders\blending.frag" />
+    <None Include="shaders\screen.vert" />
+    <None Include="shaders\screen.frag" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Glitter.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\awesomeface.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\cat2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\cat.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\container2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\matrix.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\arm_showroom_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\arm_dif.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\arm_showroom_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\body_dif.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\body_showroom_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\body_showroom_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\glass_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\hand_dif.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\glass_dif.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\hand_showroom_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\hand_showroom_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\helmet_diff.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\helmet_showroom_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\helmet_showroom_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\leg_dif.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\leg_showroom_ddn.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\nanosuit\leg_showroom_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\wolf\textures\Wolf_Body.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\wolf\textures\Wolf_Eyes_1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\wolf\textures\Wolf_Eyes_2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\wolf\textures\Wolf_Fur.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\bnc1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\brd1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\default_b.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\grs1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\h2a.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\ow1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\hfe1b.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\sw1qa.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\terrain_mtl1_bumpamt.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\trr1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\Maps\wnd1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h1.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h3.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h4.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h5.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h6.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\objects\Habitat\h7.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\metal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\objects\nanosuit\LICENSE.txt" />
+  </ItemGroup>
+</Project>
