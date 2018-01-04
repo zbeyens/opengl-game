@@ -12,8 +12,8 @@ enum Camera_Movement {
 };
 
 // Default camera values
-const GLfloat YAW = -90.0f;
-const GLfloat PITCH = 0.0f;
+const GLfloat YAW = 0.0f;
+const GLfloat PITCH = -20.0f;
 const GLfloat SPEED = 2.5f;
 const GLfloat SENSITIVTY = 0.1f;
 const GLfloat SENSITIVTY_SCROLL = 3;
@@ -24,6 +24,12 @@ class Camera : public Singleton<Camera> {
 	friend class Singleton<Camera>;
 
 public:
+	float carAcc;
+	float carYaw;
+	glm::vec3 carPosition;
+	glm::vec3 carFront;
+
+
 	// Camera Attributes
 	glm::vec3 Position;
 	glm::vec3 Front;
@@ -37,6 +43,8 @@ public:
 	GLfloat MovementSpeed;
 	GLfloat MouseSensitivity;
 	GLfloat Zoom;
+
+	int control = 0;
 
 	// Constructor with vectors
 	void init(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH);
@@ -55,6 +63,10 @@ public:
 
 	// Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
 	void ProcessMouseScroll(GLfloat yoffset);
+
+	void Idle(float deltaTime);
+
+	void setControl();
 
 private:
 	// Calculates the front vector from the Camera's (updated) Eular Angles

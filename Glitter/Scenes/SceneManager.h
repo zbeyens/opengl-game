@@ -4,17 +4,17 @@
 #include "../Singleton.h"
 #include "../SystemIncludes.h"
 
-
 class SceneBase;
 
-SINGLETON_BEGIN(SceneManager)
+class SceneManager : public Singleton<SceneManager>
+{
+	friend class Singleton<SceneManager>;
 public:
 	SceneManager();
 
 	void Init();
 	void Destroy();
 	void Idle(float fElapsedTime);
-	void Keyboard(bool special, unsigned char key);
 	void PreRender();
 	void Render();
 
@@ -24,8 +24,7 @@ public:
 
 private:
 	map<string, SceneBase*>	m_SceneDB;			// Toutes les scènes
-	SceneBase*							m_pCurrentScene;	// Pointeur sur la scène courante
-
-	SINGLETON_END()
+	SceneBase*				 m_pCurrentScene;	// Pointeur sur la scène courante
+};
 
 #endif

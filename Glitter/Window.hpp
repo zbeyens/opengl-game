@@ -7,7 +7,9 @@ bool keys[1024]; // is a key pressed or not ?
 				 // External static callback
 				 // Is called whenever a key is pressed/released via GLFW
 
-GLFWwindow* initWindow();
+GLFWwindow* window;
+
+void initWindow();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window, GLfloat deltaTime);
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mode*/);
@@ -15,8 +17,10 @@ void mouse_button_callback(GLFWwindow* /*window*/, int button, int action, int /
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double /*xoffset*/, double yoffset);
 
-GLFWwindow* initWindow()
+void initWindow()
 {
+	Config& cfg = Config::getInstance();
+
 	firstMouse = true;
 	lastX = cfg.SCR_WIDTH / 2.0;
 	lastY = cfg.SCR_HEIGHT / 2.0;
@@ -51,7 +55,7 @@ GLFWwindow* initWindow()
 
 	glfwSwapInterval(1);
 
-	return mWindow;
+	window = mWindow;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -65,6 +69,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void processInput(GLFWwindow *window, GLfloat deltaTime)
 {
+	Camera& camera = Camera::getInstance();
+
 	float cameraSpeed = 2.5f * deltaTime;
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera.ProcessKeyboard(FORWARD, deltaTime);
@@ -74,6 +80,16 @@ void processInput(GLFWwindow *window, GLfloat deltaTime)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS && !blinnKeyPressed)
+	{
+		blinn = !blinn;
+		blinnKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_RELEASE)
+	{
+		blinnKeyPressed = false;
+	}
 }
 
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mode*/)
@@ -105,13 +121,17 @@ void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int
 
 void mouse_button_callback(GLFWwindow* /*window*/, int button, int action, int /*mods*/)
 {
+	Camera& camera = Camera::getInstance();
+
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 		keys[GLFW_MOUSE_BUTTON_RIGHT] = true;
 	else
 		keys[GLFW_MOUSE_BUTTON_RIGHT] = false;
 
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
 		keys[GLFW_MOUSE_BUTTON_LEFT] = true;
+		camera.setControl();
+	}
 	else
 		keys[GLFW_MOUSE_BUTTON_LEFT] = false;
 
@@ -134,6 +154,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	lastX = xpos;
 	lastY = ypos;
 
+	Camera& camera = Camera::getInstance();
+
 	camera.ProcessMouseMovement(xoffset, yoffset);
 
 	if (keys[GLFW_MOUSE_BUTTON_RIGHT]) {
@@ -142,6 +164,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 }
 void scroll_callback(GLFWwindow* window, double /*xoffset*/, double yoffset)
 {
+	Camera& camera = Camera::getInstance();
+
 	camera.ProcessMouseScroll(yoffset);
 
 	if (keys[GLFW_MOUSE_BUTTON_LEFT]) {

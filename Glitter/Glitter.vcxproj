@@ -127,9 +127,16 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ResourceBase.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Scenes\SceneBase.h" />
+    <ClInclude Include="Scenes\SceneManager.h" />
+    <ClInclude Include="Scenes\SceneTerrain.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SystemIncludes.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureCubemap.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
@@ -137,7 +144,13 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="Scenes\SceneBase.cpp" />
+    <ClCompile Include="Scenes\SceneManager.cpp" />
+    <ClCompile Include="Scenes\SceneTerrain.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureCubemap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="configuration\root_directory.h" />
@@ -148,6 +161,9 @@
     <None Include="resources\objects\nanosuit\nanosuit.mtl" />
     <None Include="resources\objects\street\Street environment_V01.mtl" />
     <None Include="resources\objects\wolf\Wolf_obj.mtl" />
+    <None Include="resources\shaders\blinn.frag" />
+    <None Include="resources\shaders\blinn.vert" />
+    <None Include="resources\shaders\model.frag" />
     <None Include="shaders\blending.frag" />
     <None Include="shaders\blending.vert" />
     <None Include="shaders\lamp.frag" />

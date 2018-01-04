@@ -4,10 +4,34 @@
 
 
 
-SINGLETON(Config)
+class Config : public Singleton<Config>
+{
+	friend class Singleton<Config>;
 public:
 	int SCR_WIDTH = 1920;
 	int SCR_HEIGHT = 900;
+
+	vector<string> cubemapFaces
+	{
+		"./resources/textures/skybox/hw_nightsky/nightsky_rt.tga",
+		"./resources/textures/skybox/hw_nightsky/nightsky_lf.tga",
+		"./resources/textures/skybox/hw_nightsky/nightsky_up.tga",
+		"./resources/textures/skybox/hw_nightsky/nightsky_dn.tga",
+		"./resources/textures/skybox/hw_nightsky/nightsky_bk.tga",
+		"./resources/textures/skybox/hw_nightsky/nightsky_ft.tga"
+		//"./resources/textures/skybox/mp_depression/depression-pass_rt.tga",
+		//"./resources/textures/skybox/mp_depression/depression-pass_lf.tga",
+		//"./resources/textures/skybox/mp_depression/depression-pass_up.tga",
+		//"./resources/textures/skybox/mp_depression/depression-pass_dn.tga",
+		//"./resources/textures/skybox/mp_depression/depression-pass_bk.tga",
+		//"./resources/textures/skybox/mp_depression/depression-pass_ft.tga"
+		//"./resources/textures/skybox/tuto/right.jpg",
+		//"./resources/textures/skybox/tuto/left.jpg",
+		//"./resources/textures/skybox/tuto/top.jpg",
+		//"./resources/textures/skybox/tuto/bottom.jpg",
+		//"./resources/textures/skybox/tuto/back.jpg",
+		//"./resources/textures/skybox/tuto/front.jpg"
+	};
 
 	//var.set("win_posx", 150);
 	//var.set("win_posy", 150);

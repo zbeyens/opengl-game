@@ -7,9 +7,9 @@
 
 #include "SystemIncludes.h"
 
-float	startTime;		// date du système lors de l'initialisation de la base de temps
-float	currentTime;	// Temps courant remis à jour à chaque frame
-float	elapsedTime;
+double	startTime;		// date du système lors de l'initialisation de la base de temps
+double	currentTime;	// Temps courant remis à jour à chaque frame
+double	elapsedTime;
 int		nFPS;
 
 void timerStart(double time);
@@ -17,10 +17,10 @@ void timerIdle(double time);
 
 void timerIdle(double time) {
 	static int tempFPS = 0;
-	static GLfloat fPreviousFPSTime = 0.0f;
+	static double fPreviousFPSTime = 0.0f;
 
 
-	GLfloat fNewCurrentTime = time - startTime;
+	double fNewCurrentTime = time - startTime;
 
 
 	// Measure speed

@@ -17,14 +17,13 @@ class Terrain;
 class SceneTerrain : public SceneBase
 {
 public:
+	SceneTerrain() {};
 	virtual void Init();
 	virtual void Reload();
 	virtual void Destroy();
 	virtual void PreRender();
 	virtual void Render();
 	virtual void Idle(float fElapsedTime);
-	virtual void Keyboard(bool special, unsigned char key);
-	virtual void Reset();
 
 private:
 	// On place les matrices et la caméra au point de vue de la lumière pour le pré-rendu
@@ -41,25 +40,28 @@ public:
 	inline void	setSunAngle(const glm::vec2& a) { m_vSunAngle = a; }
 
 private:
-	Terrain*				m_pTerrain;
+	//Terrain*				m_pTerrain;
 	glm::vec2					m_vSunAngle;
 	glm::vec4					m_vSunVector;
 	glm::mat4					m_matSunModelviewProj;
 
 	TextureCubemap*			m_pSkybox;
 
-	Shader*					m_pShaderLighting;
-	Shader*					m_pShaderTerrain;
-	Shader*					m_pShaderWater;
-	Shader*					m_pShaderGrass;
-	Shader*					m_pShaderTree;
-	Texture2D*				m_pTerrainDiffuseMap;
-	std::vector<Texture2D*>	m_tTextures;
+	//Shader*					m_pShaderLighting;
+	//Shader*					m_pShaderTerrain;
+	//Shader*					m_pShaderWater;
+	//Shader*					m_pShaderGrass;
+	//Shader*					m_pShaderTree;
+	//Texture2D*				m_pTerrainDiffuseMap;
+	//std::vector<Texture2D*>	m_tTextures;
 
-	Texture2D*				m_pTexWaterNoiseNM;
-	FrameBufferObject		m_fboWaterReflection;
+	//Texture2D*				m_pTexWaterNoiseNM;
+	//FrameBufferObject		m_fboWaterReflection;
 
-	FrameBufferObject		m_fboDepthMapFromLight[TERRAIN_SHADOWMAPS_COUNT];
+	//FrameBufferObject		m_fboDepthMapFromLight[TERRAIN_SHADOWMAPS_COUNT];
+
+	unsigned int skyboxVAO, skyboxVBO;
+
 };
 
 #endif

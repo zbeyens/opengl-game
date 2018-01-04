@@ -3,8 +3,6 @@
 #include "SystemIncludes.h"
 #include "Shader.h"
 
-using namespace std;
-
 struct Vertex {
 	// position
 	glm::vec3 Position;
@@ -18,7 +16,7 @@ struct Vertex {
 	glm::vec3 Bitangent;
 };
 
-struct Texture {
+struct TextureMesh {
 	GLuint id;
 	string type; //diffuse, specular
 	aiString path;
@@ -29,11 +27,11 @@ public:
 	/*  Mesh Data  */
 	vector<Vertex> vertices;
 	vector<GLuint> indices; //faces
-	vector<Texture> textures;
+	vector<TextureMesh> textures;
 
 
 	// Constructor
-	Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<Texture> textures)
+	Mesh(vector<Vertex> vertices, vector<GLuint> indices, vector<TextureMesh> textures)
 	{
 		this->vertices = vertices;
 		this->indices = indices;
@@ -68,7 +66,7 @@ public:
 
 													 // now set the sampler to the correct texture unit
 			//cout << "material." + name + number << endl;
-			glUniform1i(glGetUniformLocation(shader.ID, ("material." + name + number).c_str()), i);
+			glUniform1i(glGetUniformLocation(shader.m_nProgram, ("material." + name + number).c_str()), i);
 			// and finally bind the texture
 			glBindTexture(GL_TEXTURE_2D, textures[i].id);
 		}

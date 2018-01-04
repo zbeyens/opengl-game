@@ -19,10 +19,17 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cmath>
+#include <algorithm>
+
 
 #include <assert.h>
 #include <math.h>
 
 
+
 using namespace std;
 using namespace glm;
+
+#define M_PI 3.1415926535897931f
+#define RADIANS(angleDegrees) ((angleDegrees) * M_PI / 180.0)

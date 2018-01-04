@@ -9,7 +9,7 @@ VertexBufferObject::VertexBufferObject()
 
 void VertexBufferObject::Destroy()
 {
-	glDeleteBuffersARB(1, &m_nVBOid);
+	glDeleteBuffers(1, &m_nVBOid);
 	m_nVBOid = 0;
 
 	m_tDataPosition.clear();
@@ -61,7 +61,7 @@ bool VertexBufferObject::Create(GLenum usage)
 	m_nVBO_OffsetTexcoord	= m_nVBO_OffsetNormal + nSizeNormal;
 	m_nVBO_OffsetTangent	= m_nVBO_OffsetTexcoord + nSizeTexcoord;
 
-	glGenBuffersARB(1, &m_nVBOid);
+	glGenBuffers(1, &m_nVBOid);
 	if(m_nVBOid == 0) {
 		std::cerr << "[ERROR] Init VBO failed !" << std::endl;
 	}
@@ -69,16 +69,16 @@ bool VertexBufferObject::Create(GLenum usage)
 		glBindBuffer(GL_ARRAY_BUFFER, m_nVBOid);
 		glBufferData(GL_ARRAY_BUFFER, nSizePosition+nSizeNormal+nSizeTexcoord+nSizeTangent, 0, usage);
 
-		glBufferSubData(GL_ARRAY_BUFFER_ARB, m_nVBO_OffsetPosition,	nSizePosition,	(const GLvoid*)(&m_tDataPosition[0]));
+		glBufferSubData(GL_ARRAY_BUFFER, m_nVBO_OffsetPosition,	nSizePosition,	(const GLvoid*)(&m_tDataPosition[0]));
 
 		if(m_tDataNormal.size())
-			glBufferSubData(GL_ARRAY_BUFFER_ARB, m_nVBO_OffsetNormal,	nSizeNormal,	(const GLvoid*)(&m_tDataNormal[0]));
+			glBufferSubData(GL_ARRAY_BUFFER, m_nVBO_OffsetNormal,	nSizeNormal,	(const GLvoid*)(&m_tDataNormal[0]));
 
 		if(m_tDataTexcoord.size())
-			glBufferSubData(GL_ARRAY_BUFFER_ARB, m_nVBO_OffsetTexcoord,	nSizeTexcoord,	(const GLvoid*)(&m_tDataTexcoord[0]));
+			glBufferSubData(GL_ARRAY_BUFFER, m_nVBO_OffsetTexcoord,	nSizeTexcoord,	(const GLvoid*)(&m_tDataTexcoord[0]));
 
 		if(m_tDataTangent.size())
-			glBufferSubData(GL_ARRAY_BUFFER_ARB, m_nVBO_OffsetTangent,	nSizeTangent,	(const GLvoid*)(&m_tDataTangent[0]));
+			glBufferSubData(GL_ARRAY_BUFFER, m_nVBO_OffsetTangent,	nSizeTangent,	(const GLvoid*)(&m_tDataTangent[0]));
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
@@ -103,7 +103,7 @@ void VertexBufferObject::Enable_VA()
 {
 	unsigned int slot = 0;
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, &(m_tDataPosition[0].x));
+	glVertexAttribPointer(3, GL_FLOAT, 0, &(m_tDataPosition[0].x));
 
 	if(!m_tDataNormal.empty()) {
 		glEnableClientState(GL_NORMAL_ARRAY);
@@ -129,7 +129,7 @@ void VertexBufferObject::Enable_VBO()
 	glBindBuffer(GL_ARRAY_BUFFER, m_nVBOid);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, (const GLvoid*)m_nVBO_OffsetPosition);
+	glVertexAttribPointer(3, GL_FLOAT, 0, (const GLvoid*)m_nVBO_OffsetPosition);
 
 	if(!m_tDataNormal.empty()) {
 		glEnableClientState(GL_NORMAL_ARRAY);

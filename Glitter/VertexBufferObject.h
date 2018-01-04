@@ -1,10 +1,8 @@
 #ifndef VBO_H
 #define VBO_H
 
-#include <iostream>
-#include <GL/glew.h>
-#include "Mathlib.h"
-#include <vector>
+#include "SystemIncludes.h"
+//#include "Mathlib.h"
 
 class VertexBufferObject
 {
@@ -17,10 +15,10 @@ public:
 	void		Disable();
 
 	// Buffers de données
-	inline std::vector<vec3>&	getPosition()	{return m_tDataPosition;}
-	inline std::vector<vec3>&	getNormal()		{return m_tDataNormal;}
-	inline std::vector<vec2>&	getTexcoord()	{return m_tDataTexcoord;}
-	inline std::vector<vec3>&	getTangent()	{return m_tDataTangent;}
+	inline vector<vec3>&	getPosition()	{return m_tDataPosition;}
+	inline vector<vec3>&	getNormal()		{return m_tDataNormal;}
+	inline vector<vec2>&	getTexcoord()	{return m_tDataTexcoord;}
+	inline vector<vec3>&	getTangent()	{return m_tDataTangent;}
 
 	VertexBufferObject();
 	~VertexBufferObject() {Destroy();}
@@ -40,10 +38,10 @@ private:
 	GLintptr	m_nVBO_OffsetTangent;
 
 	// Données :
-	std::vector<vec3>	m_tDataPosition;
-	std::vector<vec3>	m_tDataNormal;
-	std::vector<vec2>	m_tDataTexcoord;
-	std::vector<vec3>	m_tDataTangent;
+	vector<vec3>	m_tDataPosition;
+	vector<vec3>	m_tDataNormal;
+	vector<vec2>	m_tDataTexcoord;
+	vector<vec3>	m_tDataTangent;
 };
 
 #endif
