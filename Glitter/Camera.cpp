@@ -117,7 +117,6 @@ void Camera::ProcessKeyboard(Camera_Movement direction, GLfloat deltaTime)
 		carAcc -= deltaTime * factor;
 	}
 
-	cout << carAcc << endl;
 	//if (direction == FORWARD) {
 	//	//Position += Front * velocity;
 	//}
@@ -185,7 +184,7 @@ void Camera::updateCameraVectors()
 	carFront = Front;
 
 	carFront.x = cos(glm::radians(180 + carYaw)) * cos(glm::radians(0.7f));
-	carFront.y = sin(glm::radians(0.7f));
+	carFront.y = sin(glm::radians(-60.0f));
 	carFront.z = sin(glm::radians(180 + carYaw)) * cos(glm::radians(0.7f));
 	carFront = glm::normalize(carFront);
 }

@@ -90,6 +90,35 @@ void processInput(GLFWwindow *window, GLfloat deltaTime)
 	{
 		blinnKeyPressed = false;
 	}
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS && !gammaKeyPressed)
+	{
+		gammaEnabled = !gammaEnabled;
+		gammaKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_RELEASE)
+	{
+		gammaKeyPressed = false;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS && !filterKeyPressed)
+	{
+		filter = (filter + 1) % (nFilter + 1);
+		filterKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_RELEASE)
+	{
+		filterKeyPressed = false;
+	}
+
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS && !modeKeyPressed)
+	{
+		mode = (mode + 1) % (nMode + 1);
+		modeKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE)
+	{
+		modeKeyPressed = false;
+	}
 }
 
 void key_callback(GLFWwindow* window, int key, int /*scancode*/, int action, int /*mode*/)

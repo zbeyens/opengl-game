@@ -52,14 +52,14 @@ struct SpotLight {
 
 uniform Material material;
 uniform DirLight dirLight;
-#define NR_POINT_LIGHTS 4  
+#define NR_POINT_LIGHTS 4
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
 
 uniform vec3 viewPos;
 
 uniform samplerCube skybox;
-
+uniform int mode;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -76,23 +76,33 @@ void main()
 	vec3 result = CalcDirLight(dirLight, norm, viewDir);
 
 	// phase 2: Point lights
-	for(int i = 0; i < NR_POINT_LIGHTS; i++)
-		result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
+	for (int i = 0; i < NR_POINT_LIGHTS; i++)
+		result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 	// phase 3: Spot light
 	result += CalcSpotLight(spotLight, norm, FragPos, viewDir); 
 	result += CalcEmission();
 
-	//reflection
-	//vec3 I = normalize(FragPos - viewPos);
-	//vec3 R = reflect(I, normalize(Normal));
-	//FragColor = vec4(texture(skybox, R).rgb, 1.0);
 	
-	//float ratio = 1.00 / 1.52;
-	//vec3 I = normalize(FragPos - viewPos);
-	//vec3 R = refract(I, normalize(Normal), ratio);
-	//FragColor = vec4(texture(skybox, R).rgb, 1.0);
+	
+	if (mode == 0)
+	{
+		FragColor = vec4(result, 1.0);
+	}
+	else if (mode == 1)
+	{
+		float ratio = 1.00 / 5.52;
+		vec3 I = normalize(FragPos - viewPos);
+		vec3 R = refract(I, normalize(Normal), ratio);
+		FragColor = vec4(texture(skybox, R).rgb, 1.0);
+	}
+	else 
+	{
+		//reflection
+		vec3 I = normalize(FragPos - viewPos);
+		vec3 R = reflect(I, normalize(Normal));
+		FragColor = vec4(texture(skybox, R).rgb, 1.0);
+	}
 
-	FragColor = vec4(result, 1.0);
 }
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)

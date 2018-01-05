@@ -10,15 +10,23 @@
 #include "Scenes/SceneManager.h"
 #include "TextureCubemap.h"
 
-bool blinn = false;
+bool blinn = true;
 bool blinnKeyPressed = false;
+bool gammaEnabled = false;
+bool gammaKeyPressed = false;
+int nFilter = 4;
+int filter = 0;
+bool filterKeyPressed = false;
+int nMode = 3;
+int mode = 0;
+bool modeKeyPressed = false;
 
 #include "Window.hpp"
 
 void setLight(Shader shader, float ambient);
 GLuint createTriangleVAO();
 GLuint createLightVAO();
-GLuint loadTexture(char const * path);
+GLuint loadTexture(char const * path, bool gammaCorrection);
 void loadCubemap();
 void setTexture(GLuint type, GLuint slot, GLuint texture);
 
@@ -27,14 +35,15 @@ const string startPath = "start";
 const string lightingPath = "lighting";
 const string lampPath = "lamp";
 
+glm::vec3 pointLightPositions[] = {
+	glm::vec3(-12.0f, 2.5f, -12.0f),
+	glm::vec3(12.0f, 2.5f, 12.0f),
+	glm::vec3(-12.0f, 2.5f, 12.0f),
+	glm::vec3(12.0f, 2.5f, -12.0f),
+};
+
 GLuint VBO;
 GLuint EBO;
-
-
-// lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-
-
 
 static void displayGL()
 {
@@ -42,7 +51,6 @@ static void displayGL()
 
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
 
 static void idleGL()
 {
@@ -120,13 +128,11 @@ static void initGL()
 
 	SceneManager::getInstance().Init();
 
-
 	Camera& camera = Camera::getInstance();
 
 	camera.init(glm::vec3(0.0f, 3.0f, 4.0f));
 
 	loadCubemap();
-
 }
 
 int main(int argc, char * argv[]) {
@@ -143,8 +149,9 @@ int main(int argc, char * argv[]) {
 	Shader lampShader = Shader("lamp");
 	//Shader modelShader = Shader("model");
 	Shader streetShader = Shader("model");
+	Shader lampStreetShader = Shader("model");
 	Shader carShader = Shader("model");
-	Shader floorShader("blinn");
+	Shader floorShader("gamma");
 	Shader skyboxShader = Shader("skybox");
 	Shader screenShader("screen");
 	//Shader carShader = Shader("model");
@@ -161,6 +168,7 @@ int main(int argc, char * argv[]) {
 	//Model carModel("./resources/objects/wolf/Wolf_obj.obj");
 	//Model carModel("./resources/objects/Black Dragon/Dragon 2.5_stl.stl");
 	Model streetModel("./resources/objects/street/Street environment_V01.obj");
+	Model lampModel("./resources/objects/Street Lamp/rv_lamp_post_3.obj");
 	//Model streetModel("./resources/objects/Rockwall/Rockwall.obj");
 
 	//float planeVertices[] = {
@@ -175,13 +183,13 @@ int main(int argc, char * argv[]) {
 	//};
 	float planeVertices[] = {
 		// positions            // normals         // texcoords
-		100.0f, -0.43f,  100.0f,  0.0f, 1.0f, 0.0f,  50.0f,  0.0f,
-		-100.0f, -0.43f,  100.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-		-100.0f, -0.43f, -100.0f,  0.0f, 1.0f, 0.0f,   0.0f, 50.0f,
+		1000.0f, -0.42f,  1000.0f,  0.0f, 1.0f, 0.0f,  500.0f,  0.0f,
+		-1000.0f, -0.42f,  1000.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-1000.0f, -0.42f, -1000.0f,  0.0f, 1.0f, 0.0f,   0.0f, 500.0f,
 
-		100.0f, -0.43f,  100.0f,  0.0f, 1.0f, 0.0f,  50.0f,  0.0f,
-		-100.0f, -0.43f, -100.0f,  0.0f, 1.0f, 0.0f,   0.0f, 50.0f,
-		100.0f, -0.43f, -100.0f,  0.0f, 1.0f, 0.0f,  50.0f, 50.0f
+		1000.0f, -0.42f,  1000.0f,  0.0f, 1.0f, 0.0f,  500.0f,  0.0f,
+		-1000.0f, -0.42f, -1000.0f,  0.0f, 1.0f, 0.0f,   0.0f, 500.0f,
+		1000.0f, -0.42f, -1000.0f,  0.0f, 1.0f, 0.0f,  500.0f, 500.0f
 	};
 	float transparentVertices[] = {
 		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
@@ -225,12 +233,6 @@ int main(int argc, char * argv[]) {
 		glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 	// positions of the point lights
-	glm::vec3 pointLightPositions[] = {
-		glm::vec3(0.7f,  0.2f,  2.0f),
-		glm::vec3(2.3f, -3.3f, -4.0f),
-		glm::vec3(-4.0f,  2.0f, -12.0f),
-		glm::vec3(0.0f,  0.0f, -3.0f)
-	};
 
 	// plane VAO
 	unsigned int planeVAO, planeVBO;
@@ -270,8 +272,6 @@ int main(int argc, char * argv[]) {
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-	
-
 	// configure a uniform buffer object
 	// ---------------------------------
 	// From OpenGL version 4.2, use layout(std140, binding = ...) for each block
@@ -293,13 +293,14 @@ int main(int argc, char * argv[]) {
 	// load textures (we now use a utility function to keep the code more organized)
 	// -----------------------------------------------------------------------------
 	//GLuint diffuseMap = loadTexture("./resources/textures/container2.png");
-	GLuint specularMap = loadTexture("./resources/textures/container2_specular.png");
-	GLuint emissionMap = loadTexture("./resources/textures/matrix.jpg");
+	GLuint specularMap = loadTexture("./resources/textures/container2_specular.png", false);
+	GLuint emissionMap = loadTexture("./resources/textures/matrix.jpg", false);
 	//unsigned int floorTexture = loadTexture("./resources/textures/stones_diffuse.jpg");
-	unsigned int floorTexture = loadTexture("./resources/textures/terrain_rocky_map_1024.png");
+	unsigned int floorTexture = loadTexture("./resources/textures/brickwall.jpg", false);
+	unsigned int floorTextureGammaCorrected = loadTexture("./resources/textures/brickwall.jpg", true);
 	//unsigned int floorTexture = loadTexture("./resources/textures/sand_bm.jpg");
 	//unsigned int floorTexture = loadTexture("./resources/textures/grass.png");
-	unsigned int transparentTexture = loadTexture("./resources/textures/window.png");
+	unsigned int transparentTexture = loadTexture("./resources/textures/window.png", false);
 
 	// transparent windows locations
 	// --------------------------------
@@ -315,13 +316,21 @@ int main(int argc, char * argv[]) {
 	//stbi_set_flip_vertically_on_load(true);
 	//GLuint texture1 = createTexture("./resources/textures/container.jpg", GL_RGB);
 	//GLuint texture2 = createTexture("./resources/textures/awesomeface.png", GL_RGBA);
-	
 
 	// lighting info
 	// -------------
-	glm::vec3 lightPos(0.0f, 1.0f, 0.0f);
-	
-
+	glm::vec3 lightPositions[] = {
+		glm::vec3(-3.0f, 0.0f, 0.0f),
+		glm::vec3(-1.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f, 0.0f, 0.0f),
+		glm::vec3(3.0f, 0.0f, 0.0f)
+	};
+	glm::vec3 lightColors[] = {
+		glm::vec3(0.25),
+		glm::vec3(0.50),
+		glm::vec3(0.75),
+		glm::vec3(1.00)
+	};
 
 	// shader configuration
 	// --------------------
@@ -337,12 +346,12 @@ int main(int argc, char * argv[]) {
 	//floorShader.setInt("material.texture_diffuse1", 0);
 	//floorShader.setInt("material.texture_specular1", 1);
 
-
 	skyboxShader.Activate();
 	skyboxShader.setInt("skybox", 0);
 
 	screenShader.Activate();
 	screenShader.setInt("screenTexture", 0);
+
 
 	// framebuffer configuration
 	// -------------------------
@@ -415,26 +424,22 @@ int main(int argc, char * argv[]) {
 		floorShader.setMat4("projection", projection);
 
 		//model = glm::mat4();
-		////model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		//floorShader.setMat4("model", model);
 		// set light uniforms
+		glUniform3fv(glGetUniformLocation(floorShader.m_nProgram, "lightPositions"), 4, &lightPositions[0][0]);
+		glUniform3fv(glGetUniformLocation(floorShader.m_nProgram, "lightColors"), 4, &lightColors[0][0]);
 		floorShader.setVec3("viewPos", camera.Position);
-		floorShader.setVec3("lightPos", lightPos);
 		floorShader.setInt("blinn", blinn);
+		floorShader.setInt("gamma", gammaEnabled);
+		
 
 		// floor
 		glBindVertexArray(planeVAO);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glBindTexture(GL_TEXTURE_2D, gammaEnabled ? floorTextureGammaCorrected : floorTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		
-
-		//setTexture(0, GL_TEXTURE_2D, floorTexture);
-
-
 		setLight(floorShader, 0.10f);
-
 
 		// windows
 		//glBindVertexArray(transparentVAO);
@@ -458,10 +463,9 @@ int main(int argc, char * argv[]) {
 		model = glm::rotate(model, glm::radians(-camera.carYaw), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		carShader.setMat4("model", model);
+		carShader.setInt("mode", mode);
 		carModel.Draw(carShader);
-
-		setLight(carShader, 0.05f);
-
+		setLight(carShader, 0.2f);
 
 		streetShader.Activate();
 		// render the loaded model
@@ -470,10 +474,26 @@ int main(int argc, char * argv[]) {
 																	 //model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		streetShader.setMat4("model", model);
+		streetShader.setInt("skybox", 0);
+		streetShader.setInt("mode", mode % 3);
+
 		streetModel.Draw(streetShader);
 
-		setLight(streetShader, 0.05f);
+		setLight(streetShader, 0.1f);
 
+		lampStreetShader.Activate();
+		// render the loaded model
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			model = glm::mat4();
+			model = glm::translate(model, pointLightPositions[i] - vec3(0, 4.2, 0)); // translate it down so it's at the center of the scene
+																		 //model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+			model = glm::scale(model, glm::vec3(0.25f, 0.25f, 0.25f));	// it's a bit too big for our scene, so scale it down
+			lampStreetShader.setMat4("model", model);
+			lampModel.Draw(lampStreetShader);
+		}
+
+		setLight(lampStreetShader, 0.1f);
 
 		lightingShader.Activate();
 
@@ -524,7 +544,7 @@ int main(int argc, char * argv[]) {
 		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
 		skyboxShader.setMat4("view", view);
 		skyboxShader.setMat4("projection", projection);
-		
+
 		//sceneManager render
 		sc.Render();
 
@@ -539,6 +559,7 @@ int main(int argc, char * argv[]) {
 		glBindVertexArray(quadVAO);
 		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+		screenShader.setInt("filter", filter);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -569,7 +590,6 @@ void loadCubemap()
 	Config& cfg = Config::getInstance();
 	ResourceManager &res = ResourceManager::getInstance();
 
-
 	TextureCubemap* cubemap = res.getTextureCubemap("skybox");
 	cubemap->Bind();
 
@@ -580,7 +600,6 @@ void loadCubemap()
 		unsigned char *data = stbi_load(cfg.cubemapFaces[i].c_str(), &width, &height, &nrChannels, 0);
 		if (data)
 		{
-			cout << "elao";
 			cubemap->LoadData(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, data, width, height, 3);
 		}
 		else
@@ -593,14 +612,6 @@ void loadCubemap()
 
 void setLight(Shader shader, float ambient) {
 	Camera& camera = Camera::getInstance();
-
-	// positions of the point lights
-	glm::vec3 pointLightPositions[] = {
-		glm::vec3(0.7f,  0.2f,  2.0f),
-		glm::vec3(2.3f, -3.3f, -4.0f),
-		glm::vec3(-4.0f,  2.0f, -12.0f),
-		glm::vec3(0.0f,  0.0f, -3.0f)
-	};
 
 	// activate shader
 	//lightingShader.Activate();
@@ -624,21 +635,24 @@ void setLight(Shader shader, float ambient) {
 
 		shader.setVec3(("pointLights[" + number + "].position").c_str(), pointLightPositions[i]);
 		shader.setVec3(("pointLights[" + number + "].ambient").c_str(), glm::vec3(0.1f));
-		shader.setVec3(("pointLights[" + number + "].diffuse").c_str(), glm::vec3(0.8f));
+		shader.setVec3(("pointLights[" + number + "].diffuse").c_str(), glm::vec3(3.8f));
 		shader.setVec3(("pointLights[" + number + "].specular").c_str(), glm::vec3(5.0f));
 		shader.setFloat(("pointLights[" + number + "].constant").c_str(), 1.0f);
 		shader.setFloat(("pointLights[" + number + "].linear").c_str(), 0.09f);
 		shader.setFloat(("pointLights[" + number + "].quadratic").c_str(), 0.032f);
 	}
+
+	vec3 spotLightPos = camera.carPosition;
+	spotLightPos.x -= cos(glm::radians(camera.carYaw)) * 1.5f;
+	spotLightPos.y += 5.0f;
+	spotLightPos.z -= sin(glm::radians(camera.carYaw)) * 1.5f;
+
 	// spotLight
-	shader.setVec3("spotLight.position", camera.carPosition);
+	shader.setVec3("spotLight.position", spotLightPos);
 	shader.setVec3("spotLight.direction", camera.carFront);
-	cout << camera.Front.x << camera.Front.y << camera.Front.z << endl;
 	shader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
-	//shader.setVec3("spotLight.diffuse", 0.0f, 0.0f, 0.0f);
-	//shader.setVec3("spotLight.specular", 0.0f, 0.0f, 0.0f);
-	shader.setVec3("spotLight.diffuse", 3.0f, 3.0f, 3.0f);
-	shader.setVec3("spotLight.specular", 4.0f, 4.0f, 4.0f);
+	shader.setVec3("spotLight.diffuse", 5.0f, 5.0f, 5.0f);
+	shader.setVec3("spotLight.specular", 3.0f, 3.0f, 3.0f);
 	shader.setFloat("spotLight.constant", 1.0f);
 	shader.setFloat("spotLight.linear", 0.09);
 	shader.setFloat("spotLight.quadratic", 0.032);
@@ -743,28 +757,36 @@ GLuint createLightVAO() {
 	return lightVAO;
 }
 
-GLuint loadTexture(char const * path) {
+GLuint loadTexture(char const * path, bool gammaCorrection) {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
 	unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
 	if (data) {
-		GLenum format;
+		GLenum internalFormat;
+		GLenum dataFormat;
 		if (nrComponents == 1)
-			format = GL_RED;
+		{
+			internalFormat = dataFormat = GL_RED;
+		}
 		else if (nrComponents == 3)
-			format = GL_RGB;
+		{
+			internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+			dataFormat = GL_RGB;
+		}
 		else if (nrComponents == 4)
-			format = GL_RGBA;
+		{
+			internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+			dataFormat = GL_RGBA;
+		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		// set the texture wrapping/filtering options (on the currently bound texture object)
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, dataFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, dataFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -777,7 +799,6 @@ GLuint loadTexture(char const * path) {
 
 	return textureID;
 }
-
 
 void setTexture(GLuint slot, GLuint type, GLuint texture)
 {
